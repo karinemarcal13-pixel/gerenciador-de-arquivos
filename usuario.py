@@ -1,18 +1,54 @@
-import getpass
+import os
 
-# Função para login de usuário
+ARQ = "dados/users.txt"
+
+
+def carregar():
+    usuarios = {}
+
+    if not os.path.exists(ARQ):
+        return usuarios
+
+    with open(ARQ, "r") as f:
+        for linha in f:
+            user, senha, tipo = linha.strip().split(";")
+            usuarios[user] = {"senha": senha, "tipo": tipo}
+
+    return usuarios
+
+
+def salvar(user, senha, tipo):
+    with open(ARQ, "a") as f:
+        f.write(f"{user};{senha};{tipo}\n")
+
+
+def cadastrar():
+    print("\n=== CADASTRO ===")
+    user = input("Novo usuário: ")
+    senha = input("Senha: ")
+    tipo = input("Tipo (admin/user): ")
+
+    usuarios = carregar()
+
+    if user in usuarios:
+        print("Usuário já existe!")
+        return None
+
+    salvar(user, senha, tipo)
+    print("Usuário criado com sucesso!")
+    return user
+
+
 def login():
-    # Exemplo de dicionário de usuários (login: senha)
-    users = {"user1": "senha123", "user2": "senha456"}
-    
-    # Entrada de dados de login
-    username = input("Digite seu nome de usuário: ")
-    password = getpass.getpass("Digite sua senha: ")
-    
-    # Verificando se o usuário e a senha estão corretos
-    if username in users and users[username] == password:
-        print("Login bem-sucedido!")
-        return True
+    usuarios = carregar()
+
+    print("\n=== LOGIN ===")
+    user = input("Usuário: ")
+    senha = input("Senha: ")
+
+    if user in usuarios and usuarios[user]["senha"] == senha:
+        print("Login ok!")
+        return user, usuarios[user]["tipo"]
     else:
-        print("Usuário ou senha incorretos.")
-        return False
+        print("Login inválido!")
+        return None, None

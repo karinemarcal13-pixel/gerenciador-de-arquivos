@@ -1,46 +1,57 @@
-from usuario import login
-from arquivo import criar_arquivo, abrir_arquivo, excluir_arquivo, renomear_arquivo, copiar_arquivo, listar_arquivos
+from usuarios import login, cadastrar
+from sessao import login as set_login, logout
+from arquivos import criar, ler, editar, excluir, listar
 
-# Função de menu para interagir com o usuário
-def menu():
+
+def menu(user, tipo):
+
     while True:
-        print("\nEscolha uma operação:")
-        print("1. Criar arquivo")
-        print("2. Abrir arquivo")
-        print("3. Excluir arquivo")
-        print("4. Renomear arquivo")
-        print("5. Copiar arquivo")
-        print("6. Listar arquivos no diretório")
-        print("7. Sair")
+        print("\n===== SISTEMA OPERACIONAL =====")
+        print(f"Usuário: {user} | Tipo: {tipo}")
+        print("1 - Criar arquivo")
+        print("2 - Ler arquivo")
+        print("3 - Editar arquivo")
+        print("4 - Excluir arquivo")
+        print("5 - Listar arquivos")
 
-        escolha = input("Digite sua escolha: ")
+        if tipo == "admin":
+            print("6 - Criar usuário")
 
-        if escolha == "1":
-            nome = input("Digite o nome do arquivo: ")
-            criar_arquivo(nome)
-        elif escolha == "2":
-            nome = input("Digite o nome do arquivo: ")
-            abrir_arquivo(nome)
-        elif escolha == "3":
-            nome = input("Digite o nome do arquivo: ")
-            excluir_arquivo(nome)
-        elif escolha == "4":
-            nome_antigo = input("Digite o nome antigo do arquivo: ")
-            nome_novo = input("Digite o novo nome: ")
-            renomear_arquivo(nome_antigo, nome_novo)
-        elif escolha == "5":
-            nome_origem = input("Digite o nome do arquivo de origem: ")
-            nome_destino = input("Digite o nome do arquivo de destino: ")
-            copiar_arquivo(nome_origem, nome_destino)
-        elif escolha == "6":
-            diretorio = input("Digite o diretório: ")
-            listar_arquivos(diretorio)
-        elif escolha == "7":
-            print("Saindo...")
+        print("0 - Sair")
+
+        op = input("Escolha: ")
+
+        if op == "1":
+            criar(user)
+        elif op == "2":
+            ler(user)
+        elif op == "3":
+            editar(user)
+        elif op == "4":
+            excluir(user)
+        elif op == "5":
+            listar(user)
+        elif op == "6" and tipo == "admin":
+            cadastrar()
+        elif op == "0":
+            logout()
             break
         else:
-            print("Opção inválida.")
+            print("Opção inválida!")
 
-# Execução
-if login():
-    menu()
+
+# ================= EXECUÇÃO =================
+
+print("1 - Login")
+print("2 - Cadastro")
+
+op = input("Escolha: ")
+
+if op == "2":
+    cadastrar()
+
+user, tipo = login()
+
+if user:
+    set_login(user, tipo)
+    menu(user, tipo)

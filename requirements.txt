@@ -1,3 +1,9 @@
-# Exemplo de bibliotecas
-getpass
-python main.py
+sistema_arquivos_login/
+│
+├── main.py
+├── usuarios.py
+├── arquivos.py
+├── sessao.py
+├── dados/
+│     └── users.txt
+└── arquivos_usuario/
